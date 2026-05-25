@@ -24,7 +24,13 @@
 
 use local_geniai\local\util\release;
 
-require_once("../../config.php");
+if (file_exists(__DIR__ . '/../../config.php')) {
+    require_once(__DIR__ . '/../../config.php');
+} else if (file_exists('/var/www/html/config.php')) {
+    require_once('/var/www/html/config.php');
+} else {
+    require_once("../../config.php");
+}
 
 global $PAGE, $USER, $CFG;
 
