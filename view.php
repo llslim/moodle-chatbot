@@ -68,12 +68,18 @@ echo $OUTPUT->header();
 
 $capability = has_capability("local/geniai:manage", $context);
 
+$active_scenario = $_SESSION["chatstate-{$COURSE->id}"]["scenario"] ?? '';
+
 $data = [
     "message_01" => get_string("message_01", "local_geniai", fullname($USER)),
     "manage_capability" => $capability,
     "geniainame" => get_config("local_geniai", "geniainame"),
     "mode" => get_config("local_geniai", "mode"),
     "talk_geniai" => get_string("talk_geniai", "local_geniai", get_config("local_geniai", "geniainame")),
+    "active_scenario" => $active_scenario,
+    "anna_selected" => ($active_scenario === 'anna'),
+    "brianna_selected" => ($active_scenario === 'brianna'),
+    "cathy_selected" => ($active_scenario === 'cathy'),
 ];
 
 $geniainame = get_config("local_geniai", "geniainame");

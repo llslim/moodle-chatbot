@@ -31,6 +31,27 @@
         <input type="hidden" id="local_geniai_message_01" value="{{message_01}}" />
         <input type="hidden" id="local_geniai_message_02" value="{{message_02}}" />
 
+        <!-- Brand-new Premium Header with Persona Dropdown and Reset -->
+        <div class="geniai-header-panel">
+            <div class="geniai-brand">
+                <span class="geniai-brand-icon">💬</span>
+                <span class="geniai-brand-text">EDURA Simulator</span>
+            </div>
+            <div class="geniai-controls">
+                <div class="geniai-dropdown-wrapper">
+                    <select id="geniai-persona-select" class="geniai-select-dropdown">
+                        <option value="" disabled {{^active_scenario}}selected{{/active_scenario}}>-- Select a Parent Persona --</option>
+                        <option value="anna" {{#anna_selected}}selected{{/anna_selected}}>Anna Charles (Sarah's Mother - Autism)</option>
+                        <option value="brianna" {{#brianna_selected}}selected{{/brianna_selected}}>Brianna Mitchell (Wesley's Mother - Apraxia)</option>
+                        <option value="cathy" {{#cathy_selected}}selected{{/cathy_selected}}>Cathy Fratner (Charlie's Mother - Down Syndrome)</option>
+                    </select>
+                </div>
+                <button id="geniai-clear-history" class="geniai-clear-btn" title="{{#str}}clear_history_title,local_geniai{{/str}}">
+                    Clear Chat
+                </button>
+            </div>
+        </div>
+
         <div id="geniai-scrollarea">
             <div id="geniai-area-mensagens"></div>
         </div>
