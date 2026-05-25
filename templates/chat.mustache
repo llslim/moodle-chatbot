@@ -27,7 +27,7 @@
 }}
 
 <div class="chat-container">
-    <div id="geniai-mod-popup">
+    <div id="geniai-mod-popup" data-student-name="{{student_name}}" data-course-name="{{course_name}}">
         <input type="hidden" id="local_geniai_message_01" value="{{message_01}}" />
         <input type="hidden" id="local_geniai_message_02" value="{{message_02}}" />
 
@@ -46,6 +46,9 @@
                         <option value="cathy" {{#cathy_selected}}selected{{/cathy_selected}}>Cathy Fratner (Charlie's Mother - Down Syndrome)</option>
                     </select>
                 </div>
+                <button id="geniai-generate-pdf" class="geniai-pdf-btn" title="Export conversation log to PDF">
+                    Generate PDF
+                </button>
                 <button id="geniai-clear-history" class="geniai-clear-btn" title="{{#str}}clear_history_title,local_geniai{{/str}}">
                     Clear Chat
                 </button>

@@ -80,6 +80,8 @@ $data = [
     "anna_selected" => ($active_scenario === 'anna'),
     "brianna_selected" => ($active_scenario === 'brianna'),
     "cathy_selected" => ($active_scenario === 'cathy'),
+    "student_name" => fullname($USER),
+    "course_name" => format_string($course->fullname),
 ];
 
 $geniainame = get_config("local_geniai", "geniainame");
