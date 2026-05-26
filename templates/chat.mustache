@@ -56,7 +56,7 @@
         </div>
 
         <div id="geniai-scrollarea">
-            <div id="geniai-area-mensagens"></div>
+            <div id="geniai-area-mensagens" aria-live="polite" aria-atomic="false"></div>
         </div>
 
         <div id="geniai-sendarea">
@@ -64,18 +64,19 @@
                 id="geniai-textarea"
                 contenteditable="true"
                 placeholder="{{#str}}write_message,local_geniai{{/str}}"
+                aria-label="Student message input"
                 rows="1"
             ></textarea>
 
-            <div id="geniai-icon-stop" style="display: none" title="Stop">
+            <div id="geniai-icon-stop" style="display: none" role="button" tabindex="0" aria-label="Stop recording" title="Stop">
                 {{#pix}}icons/stop,local_geniai{{/pix}}
             </div>
 
-            <div id="geniai-icon-mic" title="{{#str}}send_message,local_geniai{{/str}}">
+            <div id="geniai-icon-mic" role="button" tabindex="0" aria-label="Record voice input" title="{{#str}}send_message,local_geniai{{/str}}">
                 {{#pix}}icons/mic,local_geniai{{/pix}}
             </div>
 
-            <div id="geniai-icon-send" title="{{#str}}send_message,local_geniai{{/str}}">
+            <div id="geniai-icon-send" role="button" tabindex="0" aria-label="Send message" title="{{#str}}send_message,local_geniai{{/str}}">
                 {{#pix}}icons/send,local_geniai{{/pix}}
             </div>
         </div>
