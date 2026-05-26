@@ -24,12 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2025032000;
-$plugin->release = "1.0.1";
+$plugin->version = 2026052500;
+$plugin->release = "1.1.0";
 $plugin->requires = 2021041900;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->component = "mod_geniai";
 
 $plugin->dependencies = [
-    "local_geniai" => 2025032000,
+    "local_geniai" => 2026052500,
 ];

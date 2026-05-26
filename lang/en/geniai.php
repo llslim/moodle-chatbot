@@ -31,3 +31,6 @@ $string['modulenameplural'] = 'LAFF Strategy Chat';
 $string['pluginadministration'] = 'Adminitrate Chats';
 $string['pluginname'] = 'LAFF Strategy Chat';
 $string['privacy:metadata'] = 'None store data';
+$string['scenariocode'] = 'Active Roleplay Persona';
+$string['scenariofile'] = 'Upload Custom JSON Scenario';
+$string['scenariofile_help'] = 'Upload a custom, structured JSON directed graph scenario config matching the PRD specification schema.';

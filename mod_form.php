@@ -53,6 +53,18 @@ class mod_geniai_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
+        $mform->addElement('select', 'scenariocode', get_string('scenariocode', 'mod_geniai'), [
+            'anna' => 'Anna Charles (Autism pre-K concern)',
+            'brianna' => 'Brianna Mitchell (Apraxia / social isolation)',
+            'cathy' => 'Cathy Fratner (Down Syndrome / app concern)',
+            'custom' => 'Custom JSON Upload (Upload scenario file below)'
+        ]);
+        $mform->setDefault('scenariocode', 'anna');
+        $mform->setType('scenariocode', PARAM_ALPHA);
+
+        $mform->addElement('filepicker', 'scenariofile', get_string('scenariofile', 'mod_geniai'), null,
+            ['maxbytes' => 1024 * 1024, 'accepted_types' => ['.json']]);
+
         // Add standard elements.
         $this->standard_coursemodule_elements();
 

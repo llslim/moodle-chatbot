@@ -39,5 +39,16 @@ function xmldb_geniai_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
+    if ($oldversion < 2026052500) {
+        $table = new xmldb_table('geniai');
+        $field = new xmldb_field('scenariocode', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, 'anna', 'introformat');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2026052500, 'mod', 'geniai');
+    }
+
     return true;
 }

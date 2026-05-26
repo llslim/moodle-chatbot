@@ -85,6 +85,16 @@ function geniai_add_instance(stdClass $data, $mform = null): int {
     // We need to use context now, so we need to make sure all needed info is already in db.
     $DB->set_field("course_modules", "instance", $data->id, ["id" => $cmid]);
 
+    // Handle saving uploaded custom JSON scenario file
+    if ($mform && isset($data->scenariofile)) {
+        $context = context_module::instance($cmid);
+        file_save_draft_area_files($data->scenariofile, $context->id, 'mod_geniai', 'scenariofile', 0,
+            ['subdirs' => 0, 'maxfiles' => 1]);
+    }
+
+    // Register with Moodle Gradebook
+    geniai_grade_item_update($data);
+
     return $data->id;
 }
 
@@ -106,7 +116,18 @@ function geniai_update_instance(stdClass $data, $mform = null): bool {
     $data->timemodified = time();
     $data->id = $data->instance;
 
-    return $DB->update_record("geniai", $data);
+    $result = $DB->update_record("geniai", $data);
+
+    if ($result && $mform && isset($data->scenariofile)) {
+        $context = context_module::instance($data->coursemodule);
+        file_save_draft_area_files($data->scenariofile, $context->id, 'mod_geniai', 'scenariofile', 0,
+            ['subdirs' => 0, 'maxfiles' => 1]);
+    }
+
+    // Sync Gradebook properties
+    geniai_grade_item_update($data);
+
+    return $result;
 }
 
 /**
@@ -131,5 +152,65 @@ function geniai_delete_instance(int $id): bool {
     $DB->delete_records("geniai", ["id" => $id]);
 
     return true;
+}
+
+/**
+ * Update/create grade item for given geniai instance.
+ *
+ * @param stdClass $geniai
+ * @param array|stdClass $grades
+ * @return int
+ */
+function geniai_grade_item_update(stdClass $geniai, $grades = null): int {
+    global $CFG;
+    require_once($CFG->libdir . '/gradelib.php');
+
+    $params = [
+        'itemname' => $geniai->name,
+        'idnumber' => $geniai->idnumber ?? '',
+        'gradetype' => GRADE_TYPE_VALUE,
+        'grademax' => 10,
+        'grademin' => 0
+    ];
+
+    if ($grades === 'reset') {
+        $params['reset'] = true;
+        $grades = null;
+    }
+
+    return grade_update('mod/geniai', $geniai->course, 'mod', 'geniai', $geniai->id, 0, $grades, $params);
+}
+
+/**
+ * Update grades in the gradebook.
+ *
+ * @param stdClass $geniai
+ * @param int $userid
+ * @param bool $nullifnone
+ */
+function geniai_update_grades(stdClass $geniai, int $userid = 0, bool $nullifnone = true): void {
+    global $DB;
+
+    $grades = [];
+    if ($userid) {
+        // Fetch specific user's session grades
+        $session = $DB->get_record('local_geniai_sessions', ['userid' => $userid, 'scenariocode' => $geniai->scenariocode], '*', IGNORE_MULTIPLE);
+        if ($session) {
+            $totalscore = 10;
+            $analytics = $DB->get_records('local_geniai_analytics', ['sessionid' => $session->id]);
+            $missedcount = 0;
+            foreach ($analytics as $analytic) {
+                if ($analytic->metric_value == 0.00) {
+                    $missedcount++;
+                }
+            }
+            $grade = new \stdClass();
+            $grade->userid = $userid;
+            $grade->rawgrade = max(0, $totalscore - $missedcount);
+            $grades[$userid] = $grade;
+        }
+    }
+
+    geniai_grade_item_update($geniai, empty($grades) ? null : $grades);
 }
 

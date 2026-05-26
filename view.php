@@ -68,7 +68,11 @@ echo $OUTPUT->header();
 
 $capability = has_capability("local/geniai:manage", $context);
 
-$active_scenario = $_SESSION["chatstate-{$COURSE->id}"]["scenario"] ?? '';
+$active_scenario = $geniai->scenariocode ?? 'anna';
+$activesession = $DB->get_record('local_geniai_sessions', ['userid' => $USER->id, 'courseid' => $course->id, 'cmid' => $cm->id], '*', IGNORE_MULTIPLE);
+if ($activesession) {
+    $active_scenario = $activesession->scenariocode;
+}
 
 $data = [
     "message_01" => get_string("message_01", "local_geniai", fullname($USER)),
